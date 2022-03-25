@@ -1,2 +1,2 @@
-go test
-fswatch -o ./ | xargs -n1 -I{} go test
+go test -v
+fswatch -o ./ | xargs -n1 -I{} go test -v
