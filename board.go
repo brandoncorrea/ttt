@@ -30,16 +30,6 @@ func BoardToString(board [3][3]int) string {
 	return strings.TrimSpace(result)
 }
 
-func Clone(board [3][3]int) [3][3]int {
-	var newBoard [3][3]int
-	for row := 0; row < 3; row++ {
-		for column := 0; column < 3; column++ {
-			newBoard[row][column] = board[row][column]
-		}
-	}
-	return newBoard
-}
-
 func FlipPlayerFlags(board [3][3]int) [3][3]int {
 	for row := 0; row < 3; row++ {
 		for column := 0; column < 3; column++ {
@@ -141,14 +131,8 @@ func AvailableMoves(board [3][3]int) [][2]int {
 
 func Children(board [3][3]int, player int) [][3][3]int {
 	var children [][3][3]int
-	for row := 0; row < 3; row++ {
-		for column := 0; column < 3; column++ {
-			if board[row][column] == 0 {
-				var child = Clone(board)
-				child[row][column] = player
-				children = append(children, child)
-			}
-		}
+	for _, move := range AvailableMoves(board) {
+		children = append(children, AssignCell(board, move, player))
 	}
 	return children
 }
