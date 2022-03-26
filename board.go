@@ -17,6 +17,22 @@ func Clone(board [3][3]int) [3][3]int {
 	return newBoard
 }
 
+func FlipCellFlags(board [3][3]int) [3][3]int {
+	var newBoard = Clone(board)
+	for row := 0; row < 3; row++ {
+		for column := 0; column < 3; column++ {
+			newBoard[row][column] *= -1
+		}
+	}
+	return newBoard
+}
+
+func AssignCell(board [3][3]int, cell [2]int, player int) [3][3]int {
+	var newBoard = Clone(board)
+	newBoard[cell[0]][cell[1]] = player
+	return newBoard
+}
+
 func Row(board [3][3]int, row int) [3]int {
 	return board[row]
 }

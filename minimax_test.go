@@ -6,20 +6,19 @@ import (
 )
 
 func TestEvaluatesEmptyBoard(t *testing.T) {
-	assert.Equal(t, 0.0, Evaluate(EmptyBoard()))
+	assert.Equal(t, 0, Evaluate(EmptyBoard()))
 }
 
 func TestEvaluatesWinningRowColumnOrDiagonal(t *testing.T) {
 	for player := range []int{-1, 1} {
-		var expected = float64(player)
 		var emptyBoard = EmptyBoard()
 		for position := 0; position < 3; position++ {
-			assert.Equal(t, expected, Evaluate(FillRow(emptyBoard, position, player)))
-			assert.Equal(t, expected, Evaluate(FillColumn(emptyBoard, position, player)))
+			assert.Equal(t, player, Evaluate(FillRow(emptyBoard, position, player)))
+			assert.Equal(t, player, Evaluate(FillColumn(emptyBoard, position, player)))
 		}
 
-		assert.Equal(t, expected, Evaluate(FillDescendingDiagonal(emptyBoard, player)))
-		assert.Equal(t, expected, Evaluate(FillAscendingDiagonal(emptyBoard, player)))
+		assert.Equal(t, player, Evaluate(FillDescendingDiagonal(emptyBoard, player)))
+		assert.Equal(t, player, Evaluate(FillAscendingDiagonal(emptyBoard, player)))
 	}
 }
 
@@ -29,7 +28,7 @@ func TestEvaluatesDrawBoard(t *testing.T) {
 		{1, -1, -1},
 		{-1, 1, 1},
 	}
-	assert.Equal(t, 0.0, Evaluate(board))
+	assert.Equal(t, 0, Evaluate(board))
 }
 
 func TestOptimalMoveOnCompletedBoard(t *testing.T) {
@@ -160,4 +159,20 @@ func TestOptimalMoveForRightT(t *testing.T) {
 		{0, 0, -1},
 	}
 	assert.Contains(t, [][2]int{{0, 1}, {2, 1}}, OptimalMove(board))
+}
+
+func TestOptimalMoveDrawsAgainstItself(t *testing.T) {
+	var board = EmptyBoard()
+	for turn := 0; turn < 9; turn++ {
+		var move = OptimalMove(board)
+		board = AssignCell(board, move, 1)
+		board = FlipCellFlags(board)
+	}
+
+	var expected = [3][3]int{
+		{-1, 1, -1},
+		{-1, 1, 1},
+		{1, -1, -1},
+	}
+	assert.Equal(t, expected, board)
 }

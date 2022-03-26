@@ -2,53 +2,49 @@ package minimax
 
 import "math"
 
-func Evaluate(board [3][3]int) float64 {
+func Evaluate(board [3][3]int) int {
 	for position := 0; position < 3; position++ {
 		if IsWinning(Row(board, position)) {
-			return float64(board[position][0])
+			return board[position][0]
 		} else if IsWinning(Column(board, position)) {
-			return float64(board[0][position])
+			return board[0][position]
 		}
 	}
 	if IsWinningDiagonal(board) {
-		return float64(board[1][1])
+		return board[1][1]
 	}
 	return 0
 }
 
-func Maximize(board [3][3]int, alpha float64, beta float64) float64 {
-	var maxValue = -math.MaxFloat64
+func Maximize(board [3][3]int) int {
+	var maxValue = math.MinInt
 	for _, child := range Children(board, 1) {
-		var value = Minimax(child, alpha, beta, false)
-		maxValue = math.Max(maxValue, value)
-		alpha = math.Max(alpha, value)
-		if beta <= alpha {
-			break
+		var value = Minimax(child, false)
+		if value > maxValue {
+			maxValue = value
 		}
 	}
 	return maxValue
 }
 
-func Minimize(board [3][3]int, alpha float64, beta float64) float64 {
-	var minValue = math.MaxFloat64
+func Minimize(board [3][3]int) int {
+	var minValue = math.MaxInt
 	for _, child := range Children(board, -1) {
-		var value = Minimax(child, alpha, beta, true)
-		minValue = math.Min(minValue, value)
-		beta = math.Min(beta, value)
-		if beta <= alpha {
-			break
+		var value = Minimax(child, true)
+		if value < minValue {
+			minValue = value
 		}
 	}
 	return minValue
 }
 
-func Minimax(board [3][3]int, alpha float64, beta float64, isMaximizing bool) float64 {
+func Minimax(board [3][3]int, isMaximizing bool) int {
 	if IsGameOver(board) {
 		return Evaluate(board)
 	} else if isMaximizing {
-		return Maximize(board, alpha, beta)
+		return Maximize(board)
 	} else {
-		return Minimize(board, alpha, beta)
+		return Minimize(board)
 	}
 }
 
@@ -71,17 +67,14 @@ var Anomalies = map[[3][3]int][2]int{
 }
 
 func OptimalMove(board [3][3]int) [2]int {
-	anomaly := Anomalies[board]
-	if anomaly != [2]int{} {
-		return anomaly
+	if cell, isAnomaly := Anomalies[board]; isAnomaly {
+		return cell
 	}
 
 	var maxMove = [2]int{-1, -1}
-	var maxValue = -math.MaxFloat64
+	var maxValue = math.MinInt
 	for _, move := range AvailableMoves(board) {
-		var child = Clone(board)
-		child[move[0]][move[1]] = 1
-		var value = Minimax(child, maxValue, math.MaxFloat64, false)
+		var value = Minimax(AssignCell(board, move, 1), false)
 		if value >= maxValue {
 			maxMove = move
 			maxValue = value
