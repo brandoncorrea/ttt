@@ -42,6 +42,14 @@ func IsEmpty(value int) bool {
 	return value == 0
 }
 
+func IsValidMove(board [3][3]int, move [2]int) bool {
+	var row = move[0]
+	var column = move[1]
+	return 0 <= row && row <= 2 &&
+		0 <= column && column <= 2 &&
+		IsEmpty(board[row][column])
+}
+
 func AssignCell(board [3][3]int, cell [2]int, player int) [3][3]int {
 	board[cell[0]][cell[1]] = player
 	return board

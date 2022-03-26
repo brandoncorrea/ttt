@@ -133,3 +133,34 @@ func TestPlayerToString(t *testing.T) {
 	assert.Equal(t, "_", PlayerToString(-2))
 	assert.Equal(t, "_", PlayerToString(2))
 }
+
+func TestOutOfRangeMovesAreInvalid(t *testing.T) {
+	var moves = [][2]int{
+		{-1, -1},
+		{-1, 1},
+		{1, -1},
+		{3, 1},
+		{1, 3},
+		{3, 3},
+	}
+	var board = EmptyBoard()
+	for _, move := range moves {
+		assert.False(t, IsValidMove(board, move))
+	}
+}
+
+func TestAllInputsWithinRangeAreValid(t *testing.T) {
+	var board = EmptyBoard()
+	core.ForIndices(func(row int, column int) {
+		assert.True(t, IsValidMove(board, [2]int{row, column}))
+	})
+}
+
+func TestCannotMoveToOccupiedCells(t *testing.T) {
+	var board = EmptyBoard()
+	board[0][0] = 1
+	board[1][1] = -1
+	assert.False(t, IsValidMove(board, [2]int{}))
+	assert.False(t, IsValidMove(board, [2]int{1, 1}))
+	assert.True(t, IsValidMove(board, [2]int{0, 1}))
+}
