@@ -1,16 +1,19 @@
-package ttt
+package minimax
 
-import "math"
+import (
+	"math"
+	"ttt/boards"
+)
 
 func Evaluate(board [3][3]int) int {
 	for position := 0; position < 3; position++ {
-		if IsWinning(Row(board, position)) {
+		if boards.IsWinning(boards.Row(board, position)) {
 			return board[position][0]
-		} else if IsWinning(Column(board, position)) {
+		} else if boards.IsWinning(boards.Column(board, position)) {
 			return board[0][position]
 		}
 	}
-	if IsWinningDiagonal(board) {
+	if boards.IsWinningDiagonal(board) {
 		return board[1][1]
 	}
 	return 0
@@ -18,7 +21,7 @@ func Evaluate(board [3][3]int) int {
 
 func Maximize(board [3][3]int) int {
 	var maxValue = math.MinInt
-	for _, child := range Children(board, 1) {
+	for _, child := range boards.Children(board, 1) {
 		var value = Minimax(child, false)
 		if value > maxValue {
 			maxValue = value
@@ -29,7 +32,7 @@ func Maximize(board [3][3]int) int {
 
 func Minimize(board [3][3]int) int {
 	var minValue = math.MaxInt
-	for _, child := range Children(board, -1) {
+	for _, child := range boards.Children(board, -1) {
 		var value = Minimax(child, true)
 		if value < minValue {
 			minValue = value
@@ -39,7 +42,7 @@ func Minimize(board [3][3]int) int {
 }
 
 func Minimax(board [3][3]int, isMaximizing bool) int {
-	if IsGameOver(board) {
+	if boards.IsGameOver(board) {
 		return Evaluate(board)
 	} else if isMaximizing {
 		return Maximize(board)
@@ -73,8 +76,8 @@ func OptimalMove(board [3][3]int) [2]int {
 
 	var maxMove = [2]int{-1, -1}
 	var maxValue = math.MinInt
-	for _, move := range AvailableMoves(board) {
-		var value = Minimax(AssignCell(board, move, 1), false)
+	for _, move := range boards.AvailableMoves(board) {
+		var value = Minimax(boards.AssignCell(board, move, 1), false)
 		if value >= maxValue {
 			maxMove = move
 			maxValue = value

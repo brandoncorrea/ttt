@@ -1,17 +1,10 @@
-package ttt
+package boards
 
 import (
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"ttt/core"
 )
-
-func FullDrawBoard() [3][3]int {
-	return [3][3]int{
-		{-1, -1, 1},
-		{1, 1, -1},
-		{-1, -1, 1},
-	}
-}
 
 func ForPlayer(f func(int)) {
 	for _, player := range []int{-1, 1} {
@@ -21,7 +14,7 @@ func ForPlayer(f func(int)) {
 
 func ForPlayerAndIndices(f func(int, int, int)) {
 	ForPlayer(func(p int) {
-		ForIndices(func(r int, c int) {
+		core.ForIndices(func(r int, c int) {
 			f(p, r, c)
 		})
 	})
@@ -37,7 +30,7 @@ func TestFullDrawBoardIsGameOver(t *testing.T) {
 
 func TestIncompleteGameIsNotGameOver(t *testing.T) {
 	var board = FullDrawBoard()
-	ForIndices(func(row int, column int) {
+	core.ForIndices(func(row int, column int) {
 		board[row][column] = 0
 		assert.False(t, IsGameOver(board))
 	})
@@ -59,7 +52,7 @@ func TestNoAvailableMoves(t *testing.T) {
 }
 
 func TestOneAvailableMove(t *testing.T) {
-	ForIndices(func(row int, column int) {
+	core.ForIndices(func(row int, column int) {
 		var board = FullDrawBoard()
 		board[row][column] = 0
 		var expected = [2]int{row, column}
@@ -70,7 +63,7 @@ func TestOneAvailableMove(t *testing.T) {
 func TestManyAvailableMove(t *testing.T) {
 	var board = FullDrawBoard()
 	var expected [][2]int
-	ForIndices(func(row int, column int) {
+	core.ForIndices(func(row int, column int) {
 		board[row][column] = 0
 		expected = append(expected, [2]int{row, column})
 		assert.Equal(t, expected, AvailableMoves(board))
@@ -95,7 +88,7 @@ func TestOneChildInBoard(t *testing.T) {
 func TestManyChildrenInBoard(t *testing.T) {
 	ForPlayer(func(player int) {
 		var expected [][3][3]int
-		ForIndices(func(row int, column int) {
+		core.ForIndices(func(row int, column int) {
 			var board = EmptyBoard()
 			board[row][column] = player
 			expected = append(expected, board)

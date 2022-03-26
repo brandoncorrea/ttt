@@ -1,4 +1,4 @@
-package ttt
+package core
 
 func ForIndices(f func(int, int)) {
 	for row := 0; row < 3; row++ {

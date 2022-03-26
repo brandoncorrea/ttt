@@ -1,9 +1,20 @@
-package ttt
+package boards
 
-import "strings"
+import (
+	"strings"
+	"ttt/core"
+)
 
 func EmptyBoard() [3][3]int {
 	return [3][3]int{}
+}
+
+func FullDrawBoard() [3][3]int {
+	return [3][3]int{
+		{-1, -1, 1},
+		{1, 1, -1},
+		{-1, -1, 1},
+	}
 }
 
 func PlayerToString(token int) string {
@@ -95,12 +106,12 @@ func IsGameOver(board [3][3]int) bool {
 		}
 	}
 
-	return IsWinningDiagonal(board) || !Any(board, IsEmpty)
+	return IsWinningDiagonal(board) || !core.Any(board, IsEmpty)
 }
 
 func AvailableMoves(board [3][3]int) [][2]int {
 	var moves [][2]int
-	ForIndices(func(row int, column int) {
+	core.ForIndices(func(row int, column int) {
 		if IsEmpty(board[row][column]) {
 			moves = append(moves, [2]int{row, column})
 		}

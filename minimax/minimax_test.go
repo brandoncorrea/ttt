@@ -1,24 +1,26 @@
-package ttt
+package minimax
 
 import (
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"ttt/boards"
+	"ttt/core"
 )
 
 func TestEvaluatesEmptyBoard(t *testing.T) {
-	assert.Equal(t, 0, Evaluate(EmptyBoard()))
+	assert.Equal(t, 0, Evaluate(boards.EmptyBoard()))
 }
 
 func TestEvaluatesWinningRowColumnOrDiagonal(t *testing.T) {
 	for player := range []int{-1, 1} {
-		var emptyBoard = EmptyBoard()
+		var emptyBoard = boards.EmptyBoard()
 		for position := 0; position < 3; position++ {
-			assert.Equal(t, player, Evaluate(FillRow(emptyBoard, position, player)))
-			assert.Equal(t, player, Evaluate(FillColumn(emptyBoard, position, player)))
+			assert.Equal(t, player, Evaluate(boards.FillRow(emptyBoard, position, player)))
+			assert.Equal(t, player, Evaluate(boards.FillColumn(emptyBoard, position, player)))
 		}
 
-		assert.Equal(t, player, Evaluate(FillDescendingDiagonal(emptyBoard, player)))
-		assert.Equal(t, player, Evaluate(FillAscendingDiagonal(emptyBoard, player)))
+		assert.Equal(t, player, Evaluate(boards.FillDescendingDiagonal(emptyBoard, player)))
+		assert.Equal(t, player, Evaluate(boards.FillAscendingDiagonal(emptyBoard, player)))
 	}
 }
 
@@ -32,7 +34,7 @@ func TestEvaluatesDrawBoard(t *testing.T) {
 }
 
 func TestOptimalMoveOnCompletedBoard(t *testing.T) {
-	assert.Equal(t, [2]int{-1, -1}, OptimalMove(FullDrawBoard()))
+	assert.Equal(t, [2]int{-1, -1}, OptimalMove(boards.FullDrawBoard()))
 }
 
 func TestOptimalMoveOnEmptyBoardChoosesCorner(t *testing.T) {
@@ -42,11 +44,11 @@ func TestOptimalMoveOnEmptyBoardChoosesCorner(t *testing.T) {
 		{2, 0},
 		{2, 2},
 	}
-	assert.Contains(t, expected, OptimalMove(EmptyBoard()))
+	assert.Contains(t, expected, OptimalMove(boards.EmptyBoard()))
 }
 
 func TestOptimalMoveWithOneAvailableMove(t *testing.T) {
-	ForIndices(func(row int, column int) {
+	core.ForIndices(func(row int, column int) {
 		var board = [3][3]int{
 			{-1, -1, 1},
 			{1, -1, -1},
@@ -161,9 +163,9 @@ func TestOptimalMoveForRightT(t *testing.T) {
 
 func TestOptimalMoveDrawsAgainstItself(t *testing.T) {
 	var negate = func(x int) int { return x * -1 }
-	var board = EmptyBoard()
+	var board = boards.EmptyBoard()
 	for turn := 0; turn < 9; turn++ {
-		board = Map(AssignCell(board, OptimalMove(board), 1), negate)
+		board = core.Map(boards.AssignCell(board, OptimalMove(board), 1), negate)
 	}
 
 	var expected = [3][3]int{
