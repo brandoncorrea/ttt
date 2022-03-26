@@ -166,7 +166,7 @@ func TestOptimalMoveDrawsAgainstItself(t *testing.T) {
 	for turn := 0; turn < 9; turn++ {
 		var move = OptimalMove(board)
 		board = AssignCell(board, move, 1)
-		board = FlipCellFlags(board)
+		board = FlipPlayerFlags(board)
 	}
 
 	var expected = [3][3]int{
