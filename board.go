@@ -1,4 +1,4 @@
-package minimax
+package ttt
 
 func EmptyBoard() [3][3]int {
 	return [3][3]int{

@@ -1,4 +1,4 @@
-package minimax
+package ttt
 
 import (
 	"github.com/stretchr/testify/assert"
