@@ -46,17 +46,15 @@ func TestOptimalMoveOnEmptyBoardChoosesCorner(t *testing.T) {
 }
 
 func TestOptimalMoveWithOneAvailableMove(t *testing.T) {
-	for row := 0; row < 3; row++ {
-		for column := 0; column < 3; column++ {
-			var board = [3][3]int{
-				{-1, -1, 1},
-				{1, -1, -1},
-				{-1, 1, 1},
-			}
-			board[row][column] = 0
-			assert.Equal(t, [2]int{row, column}, OptimalMove(board))
+	ForIndices(func(row int, column int) {
+		var board = [3][3]int{
+			{-1, -1, 1},
+			{1, -1, -1},
+			{-1, 1, 1},
 		}
-	}
+		board[row][column] = 0
+		assert.Equal(t, [2]int{row, column}, OptimalMove(board))
+	})
 }
 
 func TestOptimalMoveChoosesWinOverDraw(t *testing.T) {
@@ -162,11 +160,10 @@ func TestOptimalMoveForRightT(t *testing.T) {
 }
 
 func TestOptimalMoveDrawsAgainstItself(t *testing.T) {
+	var negate = func(x int) int { return x * -1 }
 	var board = EmptyBoard()
 	for turn := 0; turn < 9; turn++ {
-		var move = OptimalMove(board)
-		board = AssignCell(board, move, 1)
-		board = FlipPlayerFlags(board)
+		board = Map(AssignCell(board, OptimalMove(board), 1), negate)
 	}
 
 	var expected = [3][3]int{

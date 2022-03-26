@@ -3,10 +3,7 @@ package ttt
 import "strings"
 
 func EmptyBoard() [3][3]int {
-	return [3][3]int{
-		{0, 0, 0},
-		{0, 0, 0},
-		{0, 0, 0}}
+	return [3][3]int{}
 }
 
 func PlayerToString(token int) string {
@@ -30,13 +27,8 @@ func BoardToString(board [3][3]int) string {
 	return strings.TrimSpace(result)
 }
 
-func FlipPlayerFlags(board [3][3]int) [3][3]int {
-	for row := 0; row < 3; row++ {
-		for column := 0; column < 3; column++ {
-			board[row][column] *= -1
-		}
-	}
-	return board
+func IsEmpty(value int) bool {
+	return value == 0
 }
 
 func AssignCell(board [3][3]int, cell [2]int, player int) [3][3]int {
@@ -84,26 +76,15 @@ func FillAscendingDiagonal(board [3][3]int, value int) [3][3]int {
 }
 
 func IsWinning(section [3]int) bool {
-	return section[0] != 0 &&
+	return !IsEmpty(section[0]) &&
 		section[0] == section[1] &&
 		section[1] == section[2]
 }
 
 func IsWinningDiagonal(board [3][3]int) bool {
-	return board[1][1] != 0 &&
+	return !IsEmpty(board[1][1]) &&
 		((board[1][1] == board[0][0] && board[1][1] == board[2][2]) ||
 			(board[1][1] == board[0][2] && board[1][1] == board[2][0]))
-}
-
-func HasEmptyCells(board [3][3]int) bool {
-	for row := 0; row < 3; row++ {
-		for column := 0; column < 3; column++ {
-			if board[row][column] == 0 {
-				return true
-			}
-		}
-	}
-	return false
 }
 
 func IsGameOver(board [3][3]int) bool {
@@ -114,18 +95,16 @@ func IsGameOver(board [3][3]int) bool {
 		}
 	}
 
-	return IsWinningDiagonal(board) || !HasEmptyCells(board)
+	return IsWinningDiagonal(board) || !Any(board, IsEmpty)
 }
 
 func AvailableMoves(board [3][3]int) [][2]int {
 	var moves [][2]int
-	for row := 0; row < 3; row++ {
-		for column := 0; column < 3; column++ {
-			if board[row][column] == 0 {
-				moves = append(moves, [2]int{row, column})
-			}
+	ForIndices(func(row int, column int) {
+		if IsEmpty(board[row][column]) {
+			moves = append(moves, [2]int{row, column})
 		}
-	}
+	})
 	return moves
 }
 
