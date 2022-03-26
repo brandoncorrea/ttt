@@ -1,10 +1,33 @@
 package ttt
 
+import "strings"
+
 func EmptyBoard() [3][3]int {
 	return [3][3]int{
 		{0, 0, 0},
 		{0, 0, 0},
 		{0, 0, 0}}
+}
+
+func PlayerToString(token int) string {
+	if token == 1 {
+		return "X"
+	} else if token == -1 {
+		return "O"
+	} else {
+		return "_"
+	}
+}
+
+func BoardToString(board [3][3]int) string {
+	var result = ""
+	for row := 0; row < 3; row++ {
+		for column := 0; column < 3; column++ {
+			result += "| " + PlayerToString(board[row][column]) + " "
+		}
+		result += "|\r\n"
+	}
+	return strings.TrimSpace(result)
 }
 
 func Clone(board [3][3]int) [3][3]int {

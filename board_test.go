@@ -99,3 +99,40 @@ func TestManyChildrenInBoard(t *testing.T) {
 	}
 	assert.Equal(t, expected, Children(EmptyBoard(), 1))
 }
+
+func TestEmptyBoardToString(t *testing.T) {
+	var expected = "| _ | _ | _ |\r\n| _ | _ | _ |\r\n| _ | _ | _ |"
+	assert.Equal(t, expected, BoardToString(EmptyBoard()))
+}
+
+func TestBoardToStringWithOneMove(t *testing.T) {
+	var expected = "| _ | _ | _ |\r\n| _ | _ | _ |\r\n| X | _ | _ |"
+	var board = EmptyBoard()
+	board[2][0] = 1
+	assert.Equal(t, expected, BoardToString(board))
+}
+
+func TestBoardWithOneUserMove(t *testing.T) {
+	var expected = "| _ | _ | _ |\r\n| _ | O | _ |\r\n| _ | _ | _ |"
+	var board = EmptyBoard()
+	board[1][1] = -1
+	assert.Equal(t, expected, BoardToString(board))
+}
+
+func TestBoardWithMultipleMoves(t *testing.T) {
+	var expected = "| X | O | _ |\r\n| _ | X | O |\r\n| X | _ | O |"
+	var board = [3][3]int{
+		{1, -1, 0},
+		{0, 1, -1},
+		{1, 0, -1},
+	}
+	assert.Equal(t, expected, BoardToString(board))
+}
+
+func TestPlayerToString(t *testing.T) {
+	assert.Equal(t, "X", PlayerToString(1))
+	assert.Equal(t, "O", PlayerToString(-1))
+	assert.Equal(t, "_", PlayerToString(0))
+	assert.Equal(t, "_", PlayerToString(-2))
+	assert.Equal(t, "_", PlayerToString(2))
+}
