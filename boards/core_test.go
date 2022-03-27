@@ -33,7 +33,7 @@ func TestOneAvailableMove(t *testing.T) {
 	})
 }
 
-func TestManyAvailableMove(t *testing.T) {
+func TestManyAvailableMoves(t *testing.T) {
 	var board = FullDrawBoard()
 	var expected [][2]int
 	core.ForIndices(func(row int, column int) {
@@ -75,21 +75,21 @@ func TestEmptyBoardToString(t *testing.T) {
 	assert.Equal(t, expected, ToString(EmptyBoard()))
 }
 
-func TestBoardToStringWithOneMove(t *testing.T) {
+func TestBoardWithOneAIMoveToString(t *testing.T) {
 	var expected = "| _ | _ | _ |\r\n| _ | _ | _ |\r\n| X | _ | _ |"
 	var board = EmptyBoard()
 	board[2][0] = core.AI
 	assert.Equal(t, expected, ToString(board))
 }
 
-func TestBoardWithOneUserMove(t *testing.T) {
+func TestBoardWithOneUserMoveToString(t *testing.T) {
 	var expected = "| _ | _ | _ |\r\n| _ | O | _ |\r\n| _ | _ | _ |"
 	var board = EmptyBoard()
 	board[1][1] = core.User
 	assert.Equal(t, expected, ToString(board))
 }
 
-func TestBoardWithMultipleMoves(t *testing.T) {
+func TestBoardWithMultipleMovesToString(t *testing.T) {
 	var expected = "| X | O | _ |\r\n| _ | X | O |\r\n| X | _ | O |"
 	var board = [3][3]int{
 		{core.AI, core.User, core.Empty},
