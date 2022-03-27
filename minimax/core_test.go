@@ -85,7 +85,7 @@ func TestOptimalMoveWithOneAvailableMove(t *testing.T) {
 }
 
 func TestOptimalMoveDrawsAgainstItself(t *testing.T) {
-	var negate = func(x int) int { return x * -1 }
+	var negate = func(x int) int { return -x }
 	var board = boards.EmptyBoard()
 	for turn := 0; turn < 9; turn++ {
 		board = core.Map(boards.AssignCell(board, OptimalMove(board), core.AI), negate)
