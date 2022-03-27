@@ -34,7 +34,7 @@ func TestEvaluatesDrawBoard(t *testing.T) {
 }
 
 func TestOptimalMoveOnCompletedBoard(t *testing.T) {
-	assert.Equal(t, [2]int{-1, -1}, OptimalMove(boards.FullDrawBoard()))
+	assert.Equal(t, core.BadMoveResult(), OptimalMove(boards.FullDrawBoard()))
 }
 
 func TestOptimalMoveOnEmptyBoardChoosesCorner(t *testing.T) {

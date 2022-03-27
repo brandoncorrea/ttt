@@ -11,16 +11,16 @@ func EmptyBoard() [3][3]int {
 
 func FullDrawBoard() [3][3]int {
 	return [3][3]int{
-		{-1, -1, 1},
-		{1, 1, -1},
-		{-1, -1, 1},
+		{core.User, core.User, core.AI},
+		{core.AI, core.AI, core.User},
+		{core.User, core.User, core.AI},
 	}
 }
 
 func PlayerToString(token int) string {
-	if token == 1 {
+	if token == core.AI {
 		return "X"
-	} else if token == -1 {
+	} else if token == core.User {
 		return "O"
 	} else {
 		return "_"
@@ -39,7 +39,7 @@ func BoardToString(board [3][3]int) string {
 }
 
 func IsEmpty(value int) bool {
-	return value == 0
+	return value == core.Empty
 }
 
 func IsValidMove(board [3][3]int, move [2]int) bool {
@@ -53,17 +53,6 @@ func IsValidMove(board [3][3]int, move [2]int) bool {
 func AssignCell(board [3][3]int, cell [2]int, player int) [3][3]int {
 	board[cell[0]][cell[1]] = player
 	return board
-}
-
-func Row(board [3][3]int, row int) [3]int {
-	return board[row]
-}
-
-func Column(board [3][3]int, column int) [3]int {
-	return [3]int{
-		board[0][column],
-		board[1][column],
-		board[2][column]}
 }
 
 func FillRow(board [3][3]int, row int, value int) [3][3]int {
@@ -94,10 +83,15 @@ func FillAscendingDiagonal(board [3][3]int, value int) [3][3]int {
 	return board
 }
 
-func IsWinning(section [3]int) bool {
-	return !IsEmpty(section[0]) &&
-		section[0] == section[1] &&
-		section[1] == section[2]
+func IsBoardFull(board [3][3]int) bool {
+	for row := 0; row < 3; row++ {
+		for column := 0; column < 3; column++ {
+			if IsEmpty(board[row][column]) {
+				return false
+			}
+		}
+	}
+	return true
 }
 
 func IsWinningDiagonal(board [3][3]int) bool {
@@ -106,15 +100,27 @@ func IsWinningDiagonal(board [3][3]int) bool {
 			(board[1][1] == board[0][2] && board[1][1] == board[2][0]))
 }
 
+func IsWinningRow(board [3][3]int, row int) bool {
+	return !IsEmpty(board[row][0]) &&
+		board[row][0] == board[row][1] &&
+		board[row][1] == board[row][2]
+}
+
+func IsWinningColumn(board [3][3]int, column int) bool {
+	return !IsEmpty(board[0][column]) &&
+		board[0][column] == board[1][column] &&
+		board[1][column] == board[2][column]
+}
+
 func IsGameOver(board [3][3]int) bool {
 	for position := 0; position < 3; position++ {
-		if IsWinning(Row(board, position)) ||
-			IsWinning(Column(board, position)) {
+		if IsWinningRow(board, position) ||
+			IsWinningColumn(board, position) {
 			return true
 		}
 	}
 
-	return IsWinningDiagonal(board) || !core.Any(board, IsEmpty)
+	return IsWinningDiagonal(board) || IsBoardFull(board)
 }
 
 func AvailableMoves(board [3][3]int) [][2]int {

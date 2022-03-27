@@ -7,7 +7,7 @@ import (
 )
 
 func ForPlayer(f func(int)) {
-	for _, player := range []int{-1, 1} {
+	for _, player := range []int{core.AI, core.User} {
 		f(player)
 	}
 }
@@ -31,7 +31,7 @@ func TestFullDrawBoardIsGameOver(t *testing.T) {
 func TestIncompleteGameIsNotGameOver(t *testing.T) {
 	var board = FullDrawBoard()
 	core.ForIndices(func(row int, column int) {
-		board[row][column] = 0
+		board[row][column] = core.Empty
 		assert.False(t, IsGameOver(board))
 	})
 }
@@ -54,7 +54,7 @@ func TestNoAvailableMoves(t *testing.T) {
 func TestOneAvailableMove(t *testing.T) {
 	core.ForIndices(func(row int, column int) {
 		var board = FullDrawBoard()
-		board[row][column] = 0
+		board[row][column] = core.Empty
 		var expected = [2]int{row, column}
 		assert.Equal(t, [][2]int{expected}, AvailableMoves(board))
 	})
@@ -64,7 +64,7 @@ func TestManyAvailableMove(t *testing.T) {
 	var board = FullDrawBoard()
 	var expected [][2]int
 	core.ForIndices(func(row int, column int) {
-		board[row][column] = 0
+		board[row][column] = core.Empty
 		expected = append(expected, [2]int{row, column})
 		assert.Equal(t, expected, AvailableMoves(board))
 	})
@@ -78,7 +78,7 @@ func TestNoChildrenInFullBoard(t *testing.T) {
 func TestOneChildInBoard(t *testing.T) {
 	ForPlayerAndIndices(func(player int, row int, column int) {
 		var board = FullDrawBoard()
-		board[row][column] = 0
+		board[row][column] = core.Empty
 		var children = Children(board, player)
 		board[row][column] = player
 		assert.Equal(t, [][3][3]int{board}, children)
@@ -105,14 +105,14 @@ func TestEmptyBoardToString(t *testing.T) {
 func TestBoardToStringWithOneMove(t *testing.T) {
 	var expected = "| _ | _ | _ |\r\n| _ | _ | _ |\r\n| X | _ | _ |"
 	var board = EmptyBoard()
-	board[2][0] = 1
+	board[2][0] = core.AI
 	assert.Equal(t, expected, BoardToString(board))
 }
 
 func TestBoardWithOneUserMove(t *testing.T) {
 	var expected = "| _ | _ | _ |\r\n| _ | O | _ |\r\n| _ | _ | _ |"
 	var board = EmptyBoard()
-	board[1][1] = -1
+	board[1][1] = core.User
 	assert.Equal(t, expected, BoardToString(board))
 }
 
@@ -158,8 +158,8 @@ func TestAllInputsWithinRangeAreValid(t *testing.T) {
 
 func TestCannotMoveToOccupiedCells(t *testing.T) {
 	var board = EmptyBoard()
-	board[0][0] = 1
-	board[1][1] = -1
+	board[0][0] = core.AI
+	board[1][1] = core.User
 	assert.False(t, IsValidMove(board, [2]int{}))
 	assert.False(t, IsValidMove(board, [2]int{1, 1}))
 	assert.True(t, IsValidMove(board, [2]int{0, 1}))

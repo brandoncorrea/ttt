@@ -22,9 +22,9 @@ func TestParsesBadInput(t *testing.T) {
 		"1 2 3",
 		"1 - 3",
 	}
-	var badResult = [2]int{-1, -1}
+
 	for _, input := range disallowedInputs {
-		assert.Equal(t, badResult, ParseUserInput(input))
+		assert.Equal(t, core.BadMoveResult(), ParseUserInput(input))
 	}
 }
 

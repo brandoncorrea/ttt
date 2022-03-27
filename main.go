@@ -6,20 +6,21 @@ import (
 	"os"
 	"strings"
 	"ttt/boards"
+	"ttt/core"
 	"ttt/minimax"
 )
 
 func ParseUserInput(input string) [2]int {
 	var fields = strings.Fields(strings.ReplaceAll(input, ",", " "))
 	if len(fields) != 2 {
-		return [2]int{-1, -1}
+		return core.BadMoveResult()
 	}
 
 	var move [2]int
 	for i := range move {
 		var _, err = fmt.Sscan(fields[i], &move[i])
 		if err != nil {
-			return [2]int{-1, -1}
+			return core.BadMoveResult()
 		}
 	}
 
@@ -45,9 +46,9 @@ func main() {
 
 	var board = boards.EmptyBoard()
 	for !boards.IsGameOver(board) {
-		board = boards.AssignCell(board, ReadUserMove(reader, board), -1)
+		board = boards.AssignCell(board, ReadUserMove(reader, board), core.User)
 		if !boards.IsGameOver(board) {
-			board = boards.AssignCell(board, minimax.OptimalMove(board), 1)
+			board = boards.AssignCell(board, minimax.OptimalMove(board), core.AI)
 		}
 	}
 
