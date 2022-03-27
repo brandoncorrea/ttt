@@ -28,7 +28,7 @@ func ParseUserInput(input string) [2]int {
 }
 
 func ReadUserMove(reader *bufio.Reader, board [3][3]int) [2]int {
-	fmt.Println(boards.BoardToString(board))
+	fmt.Println(boards.ToString(board))
 	for {
 		fmt.Print("Your Move: ")
 		input, _ := reader.ReadString('\n')
@@ -52,6 +52,6 @@ func main() {
 		}
 	}
 
-	fmt.Println(boards.BoardToString(board))
+	fmt.Println(boards.ToString(board))
 	fmt.Println("Game Over!")
 }

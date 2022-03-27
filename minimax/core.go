@@ -6,20 +6,6 @@ import (
 	"ttt/core"
 )
 
-func Evaluate(board [3][3]int) int {
-	for position := 0; position < 3; position++ {
-		if boards.IsWinningRow(board, position) {
-			return board[position][0]
-		} else if boards.IsWinningColumn(board, position) {
-			return board[0][position]
-		}
-	}
-	if boards.IsWinningDiagonal(board) {
-		return board[1][1]
-	}
-	return 0
-}
-
 func Maximize(board [3][3]int) int {
 	var maxValue = math.MinInt
 	for _, child := range boards.Children(board, core.AI) {
@@ -44,7 +30,7 @@ func Minimize(board [3][3]int) int {
 
 func Minimax(board [3][3]int, isMaximizing bool) int {
 	if boards.IsGameOver(board) {
-		return Evaluate(board)
+		return boards.WinningPlayer(board)
 	} else if isMaximizing {
 		return Maximize(board)
 	} else {

@@ -20,33 +20,6 @@ func ForPlayerAndIndices(f func(int, int, int)) {
 	})
 }
 
-func TestEmptyBoardIsNotGameOver(t *testing.T) {
-	assert.False(t, IsGameOver(EmptyBoard()))
-}
-
-func TestFullDrawBoardIsGameOver(t *testing.T) {
-	assert.True(t, IsGameOver(FullDrawBoard()))
-}
-
-func TestIncompleteGameIsNotGameOver(t *testing.T) {
-	var board = FullDrawBoard()
-	core.ForIndices(func(row int, column int) {
-		board[row][column] = core.Empty
-		assert.False(t, IsGameOver(board))
-	})
-}
-
-func TestWinningPlayerIsGameOver(t *testing.T) {
-	ForPlayer(func(player int) {
-		for position := 0; position < 3; position++ {
-			assert.True(t, IsGameOver(FillRow(EmptyBoard(), position, player)))
-			assert.True(t, IsGameOver(FillColumn(EmptyBoard(), position, player)))
-		}
-		assert.True(t, IsGameOver(FillAscendingDiagonal(EmptyBoard(), player)))
-		assert.True(t, IsGameOver(FillDescendingDiagonal(EmptyBoard(), player)))
-	})
-}
-
 func TestNoAvailableMoves(t *testing.T) {
 	assert.Empty(t, AvailableMoves(FullDrawBoard()))
 }
@@ -99,68 +72,58 @@ func TestManyChildrenInBoard(t *testing.T) {
 
 func TestEmptyBoardToString(t *testing.T) {
 	var expected = "| _ | _ | _ |\r\n| _ | _ | _ |\r\n| _ | _ | _ |"
-	assert.Equal(t, expected, BoardToString(EmptyBoard()))
+	assert.Equal(t, expected, ToString(EmptyBoard()))
 }
 
 func TestBoardToStringWithOneMove(t *testing.T) {
 	var expected = "| _ | _ | _ |\r\n| _ | _ | _ |\r\n| X | _ | _ |"
 	var board = EmptyBoard()
 	board[2][0] = core.AI
-	assert.Equal(t, expected, BoardToString(board))
+	assert.Equal(t, expected, ToString(board))
 }
 
 func TestBoardWithOneUserMove(t *testing.T) {
 	var expected = "| _ | _ | _ |\r\n| _ | O | _ |\r\n| _ | _ | _ |"
 	var board = EmptyBoard()
 	board[1][1] = core.User
-	assert.Equal(t, expected, BoardToString(board))
+	assert.Equal(t, expected, ToString(board))
 }
 
 func TestBoardWithMultipleMoves(t *testing.T) {
 	var expected = "| X | O | _ |\r\n| _ | X | O |\r\n| X | _ | O |"
 	var board = [3][3]int{
-		{1, -1, 0},
-		{0, 1, -1},
-		{1, 0, -1},
+		{core.AI, core.User, core.Empty},
+		{core.Empty, core.AI, core.User},
+		{core.AI, core.Empty, core.User},
 	}
-	assert.Equal(t, expected, BoardToString(board))
+	assert.Equal(t, expected, ToString(board))
 }
 
 func TestPlayerToString(t *testing.T) {
-	assert.Equal(t, "X", PlayerToString(1))
-	assert.Equal(t, "O", PlayerToString(-1))
-	assert.Equal(t, "_", PlayerToString(0))
+	assert.Equal(t, "X", PlayerToString(core.AI))
+	assert.Equal(t, "O", PlayerToString(core.User))
+	assert.Equal(t, "_", PlayerToString(core.Empty))
 	assert.Equal(t, "_", PlayerToString(-2))
 	assert.Equal(t, "_", PlayerToString(2))
 }
 
-func TestOutOfRangeMovesAreInvalid(t *testing.T) {
-	var moves = [][2]int{
-		{-1, -1},
-		{-1, 1},
-		{1, -1},
-		{3, 1},
-		{1, 3},
-		{3, 3},
-	}
-	var board = EmptyBoard()
-	for _, move := range moves {
-		assert.False(t, IsValidMove(board, move))
+func TestNoWinningPlayerOnEmptyBoard(t *testing.T) {
+	assert.Equal(t, core.Empty, WinningPlayer(EmptyBoard()))
+}
+
+func TestWinningPlayerOnRowColumnOrDiagonal(t *testing.T) {
+	for player := range []int{core.User, core.AI} {
+		var emptyBoard = EmptyBoard()
+		for position := 0; position < 3; position++ {
+			assert.Equal(t, player, WinningPlayer(FillRow(emptyBoard, position, player)))
+			assert.Equal(t, player, WinningPlayer(FillColumn(emptyBoard, position, player)))
+		}
+
+		assert.Equal(t, player, WinningPlayer(FillDescendingDiagonal(emptyBoard, player)))
+		assert.Equal(t, player, WinningPlayer(FillAscendingDiagonal(emptyBoard, player)))
 	}
 }
 
-func TestAllInputsWithinRangeAreValid(t *testing.T) {
-	var board = EmptyBoard()
-	core.ForIndices(func(row int, column int) {
-		assert.True(t, IsValidMove(board, [2]int{row, column}))
-	})
-}
-
-func TestCannotMoveToOccupiedCells(t *testing.T) {
-	var board = EmptyBoard()
-	board[0][0] = core.AI
-	board[1][1] = core.User
-	assert.False(t, IsValidMove(board, [2]int{}))
-	assert.False(t, IsValidMove(board, [2]int{1, 1}))
-	assert.True(t, IsValidMove(board, [2]int{0, 1}))
+func TestNoWinnerOnDrawBoard(t *testing.T) {
+	assert.Equal(t, core.Empty, WinningPlayer(FullDrawBoard()))
 }
