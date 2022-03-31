@@ -3,6 +3,7 @@ package boards
 import (
 	"strings"
 	"ttt/core"
+	"ttt/it"
 )
 
 func ForIndices(f func(int, int)) {
@@ -13,7 +14,7 @@ func ForIndices(f func(int, int)) {
 	}
 }
 
-func EmptyBoard() [3][3]int {
+func Empty() [3][3]int {
 	return [3][3]int{}
 }
 
@@ -53,13 +54,13 @@ func AssignCell(board [3][3]int, cell [2]int, player int) [3][3]int {
 
 func WinningPlayer(board [3][3]int) int {
 	for position := 0; position < 3; position++ {
-		if IsWinningRow(board, position) {
+		if it.IsWinningRow(board, position) {
 			return board[position][0]
-		} else if IsWinningColumn(board, position) {
+		} else if it.IsWinningColumn(board, position) {
 			return board[0][position]
 		}
 	}
-	if IsWinningDiagonal(board) {
+	if it.IsWinningDiagonal(board) {
 		return board[1][1]
 	}
 	return core.Empty
@@ -68,7 +69,7 @@ func WinningPlayer(board [3][3]int) int {
 func AvailableMoves(board [3][3]int) [][2]int {
 	var moves [][2]int
 	ForIndices(func(row int, column int) {
-		if IsEmpty(board[row][column]) {
+		if it.IsEmpty(board[row][column]) {
 			moves = append(moves, [2]int{row, column})
 		}
 	})

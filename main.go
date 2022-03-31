@@ -7,6 +7,7 @@ import (
 	"strings"
 	"ttt/boards"
 	"ttt/core"
+	"ttt/it"
 	"ttt/minimax"
 )
 
@@ -33,16 +34,16 @@ func ReadUserMove(reader *bufio.Reader, board [3][3]int) [2]int {
 		fmt.Print("Your Move: ")
 		input, _ := reader.ReadString('\n')
 		var move = ParseUserInput(input)
-		if boards.IsValidMove(board, move) {
+		if it.IsValidMove(board, move) {
 			return move
 		}
 	}
 }
 
 func Play(reader *bufio.Reader, board [3][3]int) [3][3]int {
-	for !boards.IsGameOver(board) {
+	for !it.IsGameOver(board) {
 		board = boards.AssignCell(board, ReadUserMove(reader, board), core.User)
-		if !boards.IsGameOver(board) {
+		if !it.IsGameOver(board) {
 			board = boards.AssignCell(board, minimax.OptimalMove(board), core.AI)
 		}
 	}
@@ -52,6 +53,6 @@ func Play(reader *bufio.Reader, board [3][3]int) [3][3]int {
 func main() {
 	fmt.Println("Tic Tac Toe")
 	fmt.Println("--------------------")
-	fmt.Println(boards.ToString(Play(bufio.NewReader(os.Stdin), boards.EmptyBoard())))
+	fmt.Println(boards.ToString(Play(bufio.NewReader(os.Stdin), boards.Empty())))
 	fmt.Println("Game Over!")
 }
