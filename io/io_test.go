@@ -1,10 +1,11 @@
-package main
+package io_test
 
 import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"ttt/boards"
+	"ttt/io"
 )
 
 func TestParsesBadInput(t *testing.T) {
@@ -24,7 +25,7 @@ func TestParsesBadInput(t *testing.T) {
 	}
 
 	for _, input := range disallowedInputs {
-		assert.Equal(t, boards.BadMoveResult(), ParseUserInput(input))
+		assert.Equal(t, boards.BadMoveResult(), io.ParseUserInput(input))
 	}
 }
 
@@ -39,7 +40,7 @@ func TestParsesFirstCell(t *testing.T) {
 	boards.ForIndices(func(row int, column int) {
 		var cell = [2]int{row, column}
 		for _, format := range acceptableFormats {
-			assert.Equal(t, cell, ParseUserInput(fmt.Sprintf(format, row, column)))
+			assert.Equal(t, cell, io.ParseUserInput(fmt.Sprintf(format, row, column)))
 		}
 	})
 }
