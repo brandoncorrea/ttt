@@ -1,4 +1,4 @@
-package it
+package boards
 
 import "ttt/players"
 

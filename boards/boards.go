@@ -2,7 +2,6 @@ package boards
 
 import (
 	"strings"
-	"ttt/it"
 	"ttt/players"
 )
 
@@ -32,13 +31,13 @@ func AssignCell(board [3][3]int, cell [2]int, player int) [3][3]int {
 
 func WinningPlayer(board [3][3]int) int {
 	for position := 0; position < 3; position++ {
-		if it.IsWinningRow(board, position) {
+		if IsWinningRow(board, position) {
 			return board[position][0]
-		} else if it.IsWinningColumn(board, position) {
+		} else if IsWinningColumn(board, position) {
 			return board[0][position]
 		}
 	}
-	if it.IsWinningDiagonal(board) {
+	if IsWinningDiagonal(board) {
 		return board[1][1]
 	}
 	return players.Empty
@@ -47,7 +46,7 @@ func WinningPlayer(board [3][3]int) int {
 func AvailableMoves(board [3][3]int) [][2]int {
 	var moves [][2]int
 	ForIndices(func(row int, column int) {
-		if it.IsEmpty(board[row][column]) {
+		if IsEmpty(board[row][column]) {
 			moves = append(moves, [2]int{row, column})
 		}
 	})

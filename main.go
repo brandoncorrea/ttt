@@ -6,7 +6,6 @@ import (
 	"os"
 	"strings"
 	"ttt/boards"
-	"ttt/it"
 	"ttt/minimax"
 	"ttt/players"
 )
@@ -34,16 +33,16 @@ func ReadUserMove(reader *bufio.Reader, board [3][3]int) [2]int {
 		fmt.Print("Your Move: ")
 		input, _ := reader.ReadString('\n')
 		var move = ParseUserInput(input)
-		if it.IsValidMove(board, move) {
+		if boards.IsValidMove(board, move) {
 			return move
 		}
 	}
 }
 
 func Play(reader *bufio.Reader, board [3][3]int) [3][3]int {
-	for !it.IsGameOver(board) {
+	for !boards.IsGameOver(board) {
 		board = boards.AssignCell(board, ReadUserMove(reader, board), players.User)
-		if !it.IsGameOver(board) {
+		if !boards.IsGameOver(board) {
 			board = boards.AssignCell(board, minimax.OptimalMove(board), players.AI)
 		}
 	}

@@ -4,7 +4,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"ttt/boards"
-	"ttt/it"
 	"ttt/minimax"
 	"ttt/players"
 )
@@ -95,6 +94,6 @@ func TestOptimalMoveDrawsAgainstItself(t *testing.T) {
 		})
 	}
 
-	assert.True(t, it.IsFull(board))
+	assert.True(t, boards.IsFull(board))
 	assert.Equal(t, players.Empty, boards.WinningPlayer(board))
 }

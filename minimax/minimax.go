@@ -3,7 +3,6 @@ package minimax
 import (
 	"math"
 	"ttt/boards"
-	"ttt/it"
 	"ttt/players"
 )
 
@@ -30,7 +29,7 @@ func Minimize(board [3][3]int) int {
 }
 
 func Minimax(board [3][3]int, isMaximizing bool) int {
-	if it.IsGameOver(board) {
+	if boards.IsGameOver(board) {
 		return boards.WinningPlayer(board)
 	} else if isMaximizing {
 		return Maximize(board)
