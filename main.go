@@ -39,19 +39,19 @@ func ReadUserMove(reader *bufio.Reader, board [3][3]int) [2]int {
 	}
 }
 
-func main() {
-	reader := bufio.NewReader(os.Stdin)
-	fmt.Println("Tic Tac Toe")
-	fmt.Println("--------------------")
-
-	var board = boards.EmptyBoard()
+func Play(reader *bufio.Reader, board [3][3]int) [3][3]int {
 	for !boards.IsGameOver(board) {
 		board = boards.AssignCell(board, ReadUserMove(reader, board), core.User)
 		if !boards.IsGameOver(board) {
 			board = boards.AssignCell(board, minimax.OptimalMove(board), core.AI)
 		}
 	}
+	return board
+}
 
-	fmt.Println(boards.ToString(board))
+func main() {
+	fmt.Println("Tic Tac Toe")
+	fmt.Println("--------------------")
+	fmt.Println(boards.ToString(Play(bufio.NewReader(os.Stdin), boards.EmptyBoard())))
 	fmt.Println("Game Over!")
 }
