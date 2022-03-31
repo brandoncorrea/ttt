@@ -85,10 +85,12 @@ func TestOptimalMoveWithOneAvailableMove(t *testing.T) {
 }
 
 func TestOptimalMoveDrawsAgainstItself(t *testing.T) {
-	var negate = func(x int) int { return -x }
 	var board = boards.EmptyBoard()
 	for turn := 0; turn < 9; turn++ {
-		board = core.Map(boards.AssignCell(board, OptimalMove(board), core.AI), negate)
+		board = boards.AssignCell(board, OptimalMove(board), core.AI)
+		core.ForIndices(func(row int, column int) {
+			board[row][column] *= -1
+		})
 	}
 
 	assert.True(t, boards.IsFull(board))

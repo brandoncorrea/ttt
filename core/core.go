@@ -17,10 +17,3 @@ func ForIndices(f func(int, int)) {
 		}
 	}
 }
-
-func Map(board [3][3]int, f func(int) int) [3][3]int {
-	ForIndices(func(row int, column int) {
-		board[row][column] = f(board[row][column])
-	})
-	return board
-}
