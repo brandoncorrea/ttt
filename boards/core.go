@@ -5,6 +5,14 @@ import (
 	"ttt/core"
 )
 
+func ForIndices(f func(int, int)) {
+	for row := 0; row < 3; row++ {
+		for column := 0; column < 3; column++ {
+			f(row, column)
+		}
+	}
+}
+
 func EmptyBoard() [3][3]int {
 	return [3][3]int{}
 }
@@ -59,7 +67,7 @@ func WinningPlayer(board [3][3]int) int {
 
 func AvailableMoves(board [3][3]int) [][2]int {
 	var moves [][2]int
-	core.ForIndices(func(row int, column int) {
+	ForIndices(func(row int, column int) {
 		if IsEmpty(board[row][column]) {
 			moves = append(moves, [2]int{row, column})
 		}

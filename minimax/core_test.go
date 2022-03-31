@@ -77,7 +77,7 @@ func TestOptimalMoveOnCompletedBoard(t *testing.T) {
 }
 
 func TestOptimalMoveWithOneAvailableMove(t *testing.T) {
-	core.ForIndices(func(row int, column int) {
+	boards.ForIndices(func(row int, column int) {
 		var board = boards.FullDrawBoard()
 		board[row][column] = core.Empty
 		assert.Equal(t, [2]int{row, column}, OptimalMove(board))
@@ -88,7 +88,7 @@ func TestOptimalMoveDrawsAgainstItself(t *testing.T) {
 	var board = boards.EmptyBoard()
 	for turn := 0; turn < 9; turn++ {
 		board = boards.AssignCell(board, OptimalMove(board), core.AI)
-		core.ForIndices(func(row int, column int) {
+		boards.ForIndices(func(row int, column int) {
 			board[row][column] *= -1
 		})
 	}

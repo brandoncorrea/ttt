@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"ttt/boards"
 	"ttt/core"
 )
 
@@ -36,7 +37,7 @@ func TestParsesFirstCell(t *testing.T) {
 		"  \t  %d  \n  %d \r ",
 	}
 
-	core.ForIndices(func(row int, column int) {
+	boards.ForIndices(func(row int, column int) {
 		var cell = [2]int{row, column}
 		for _, format := range acceptableFormats {
 			assert.Equal(t, cell, ParseUserInput(fmt.Sprintf(format, row, column)))

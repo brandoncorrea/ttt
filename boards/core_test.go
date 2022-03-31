@@ -14,7 +14,7 @@ func ForPlayer(f func(int)) {
 
 func ForPlayerAndIndices(f func(int, int, int)) {
 	ForPlayer(func(p int) {
-		core.ForIndices(func(r int, c int) {
+		ForIndices(func(r int, c int) {
 			f(p, r, c)
 		})
 	})
@@ -25,7 +25,7 @@ func TestNoAvailableMoves(t *testing.T) {
 }
 
 func TestOneAvailableMove(t *testing.T) {
-	core.ForIndices(func(row int, column int) {
+	ForIndices(func(row int, column int) {
 		var board = FullDrawBoard()
 		board[row][column] = core.Empty
 		var expected = [2]int{row, column}
@@ -36,7 +36,7 @@ func TestOneAvailableMove(t *testing.T) {
 func TestManyAvailableMoves(t *testing.T) {
 	var board = FullDrawBoard()
 	var expected [][2]int
-	core.ForIndices(func(row int, column int) {
+	ForIndices(func(row int, column int) {
 		board[row][column] = core.Empty
 		expected = append(expected, [2]int{row, column})
 		assert.Equal(t, expected, AvailableMoves(board))
@@ -61,7 +61,7 @@ func TestOneChildInBoard(t *testing.T) {
 func TestManyChildrenInBoard(t *testing.T) {
 	ForPlayer(func(player int) {
 		var expected [][3][3]int
-		core.ForIndices(func(row int, column int) {
+		ForIndices(func(row int, column int) {
 			var board = EmptyBoard()
 			board[row][column] = player
 			expected = append(expected, board)

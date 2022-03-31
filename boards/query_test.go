@@ -16,7 +16,7 @@ func TestFullDrawBoardIsGameOver(t *testing.T) {
 
 func TestIncompleteGameIsNotGameOver(t *testing.T) {
 	var board = FullDrawBoard()
-	core.ForIndices(func(row int, column int) {
+	ForIndices(func(row int, column int) {
 		board[row][column] = core.Empty
 		assert.False(t, IsGameOver(board))
 	})
@@ -50,7 +50,7 @@ func TestOutOfRangeMovesAreInvalid(t *testing.T) {
 
 func TestAllInputsWithinRangeAreValid(t *testing.T) {
 	var board = EmptyBoard()
-	core.ForIndices(func(row int, column int) {
+	ForIndices(func(row int, column int) {
 		assert.True(t, IsValidMove(board, [2]int{row, column}))
 	})
 }
