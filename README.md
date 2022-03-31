@@ -39,10 +39,10 @@ Your Move: 2 2
 ### Test
 
 #### Run all Tests
-`go test ./..`
+`go test ./...`
 
 #### Run Tests Verbose
-`go test -v ./..`
+`go test -v ./...`
 
 #### Autorun Tests Verbose
 `/bin/zsh ./autotest.sh`
