@@ -1,6 +1,6 @@
 # ttt
 
-Tic Tac Toe game written in Go.
+Tic-Tac-Toe game written in Go.
 
 ### Objective
 
