@@ -6,27 +6,11 @@ import (
 	"ttt/players"
 )
 
-func BadMoveResult() [2]int {
-	return [2]int{-1, -1}
-}
-
-func Empty() [3][3]int {
-	return [3][3]int{}
-}
-
 func ForIndices(f func(int, int)) {
 	for row := 0; row < 3; row++ {
 		for column := 0; column < 3; column++ {
 			f(row, column)
 		}
-	}
-}
-
-func FullDrawBoard() [3][3]int {
-	return [3][3]int{
-		{players.User, players.User, players.AI},
-		{players.AI, players.AI, players.User},
-		{players.User, players.User, players.AI},
 	}
 }
 
