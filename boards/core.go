@@ -2,9 +2,17 @@ package boards
 
 import (
 	"strings"
-	"ttt/core"
 	"ttt/it"
+	"ttt/players"
 )
+
+func BadMoveResult() [2]int {
+	return [2]int{-1, -1}
+}
+
+func Empty() [3][3]int {
+	return [3][3]int{}
+}
 
 func ForIndices(f func(int, int)) {
 	for row := 0; row < 3; row++ {
@@ -14,25 +22,11 @@ func ForIndices(f func(int, int)) {
 	}
 }
 
-func Empty() [3][3]int {
-	return [3][3]int{}
-}
-
 func FullDrawBoard() [3][3]int {
 	return [3][3]int{
-		{core.User, core.User, core.AI},
-		{core.AI, core.AI, core.User},
-		{core.User, core.User, core.AI},
-	}
-}
-
-func PlayerToString(token int) string {
-	if token == core.AI {
-		return "X"
-	} else if token == core.User {
-		return "O"
-	} else {
-		return "_"
+		{players.User, players.User, players.AI},
+		{players.AI, players.AI, players.User},
+		{players.User, players.User, players.AI},
 	}
 }
 
@@ -40,7 +34,7 @@ func ToString(board [3][3]int) string {
 	var result = ""
 	for row := 0; row < 3; row++ {
 		for column := 0; column < 3; column++ {
-			result += "| " + PlayerToString(board[row][column]) + " "
+			result += "| " + players.ToString(board[row][column]) + " "
 		}
 		result += "|\r\n"
 	}
@@ -63,7 +57,7 @@ func WinningPlayer(board [3][3]int) int {
 	if it.IsWinningDiagonal(board) {
 		return board[1][1]
 	}
-	return core.Empty
+	return players.Empty
 }
 
 func AvailableMoves(board [3][3]int) [][2]int {

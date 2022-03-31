@@ -5,7 +5,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"ttt/boards"
-	"ttt/core"
 )
 
 func TestParsesBadInput(t *testing.T) {
@@ -25,7 +24,7 @@ func TestParsesBadInput(t *testing.T) {
 	}
 
 	for _, input := range disallowedInputs {
-		assert.Equal(t, core.BadMoveResult(), ParseUserInput(input))
+		assert.Equal(t, boards.BadMoveResult(), ParseUserInput(input))
 	}
 }
 

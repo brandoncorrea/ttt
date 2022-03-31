@@ -3,13 +3,13 @@ package minimax
 import (
 	"math"
 	"ttt/boards"
-	"ttt/core"
 	"ttt/it"
+	"ttt/players"
 )
 
 func Maximize(board [3][3]int) int {
 	var maxValue = math.MinInt
-	for _, child := range boards.Children(board, core.AI) {
+	for _, child := range boards.Children(board, players.AI) {
 		var value = Minimax(child, false)
 		if value > maxValue {
 			maxValue = value
@@ -20,7 +20,7 @@ func Maximize(board [3][3]int) int {
 
 func Minimize(board [3][3]int) int {
 	var minValue = math.MaxInt
-	for _, child := range boards.Children(board, core.User) {
+	for _, child := range boards.Children(board, players.User) {
 		var value = Minimax(child, true)
 		if value < minValue {
 			minValue = value
@@ -41,19 +41,19 @@ func Minimax(board [3][3]int, isMaximizing bool) int {
 
 var Anomalies = map[[3][3]int][2]int{
 	{
-		{core.AI, core.User, core.Empty},
-		{core.User, core.AI, core.Empty},
-		{core.Empty, core.Empty, core.User},
+		{players.AI, players.User, players.Empty},
+		{players.User, players.AI, players.Empty},
+		{players.Empty, players.Empty, players.User},
 	}: {0, 2},
 	{
-		{core.User, core.AI, core.User},
-		{core.Empty, core.AI, core.Empty},
-		{core.Empty, core.User, core.Empty},
+		{players.User, players.AI, players.User},
+		{players.Empty, players.AI, players.Empty},
+		{players.Empty, players.User, players.Empty},
 	}: {1, 0},
 	{
-		{core.User, core.Empty, core.Empty},
-		{core.AI, core.AI, core.User},
-		{core.User, core.Empty, core.Empty},
+		{players.User, players.Empty, players.Empty},
+		{players.AI, players.AI, players.User},
+		{players.User, players.Empty, players.Empty},
 	}: {0, 1},
 }
 
@@ -62,10 +62,10 @@ func OptimalMove(board [3][3]int) [2]int {
 		return cell
 	}
 
-	var maxMove = core.BadMoveResult()
+	var maxMove = boards.BadMoveResult()
 	var maxValue = math.MinInt
 	for _, move := range boards.AvailableMoves(board) {
-		var value = Minimax(boards.AssignCell(board, move, core.AI), false)
+		var value = Minimax(boards.AssignCell(board, move, players.AI), false)
 		if value >= maxValue {
 			maxMove = move
 			maxValue = value

@@ -4,8 +4,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"ttt/boards"
-	"ttt/core"
 	"ttt/it"
+	"ttt/players"
 )
 
 func TestEmptyBoardIsNotGameOver(t *testing.T) {
@@ -19,13 +19,13 @@ func TestFullDrawBoardIsGameOver(t *testing.T) {
 func TestIncompleteGameIsNotGameOver(t *testing.T) {
 	var board = boards.FullDrawBoard()
 	boards.ForIndices(func(row int, column int) {
-		board[row][column] = core.Empty
+		board[row][column] = players.Empty
 		assert.False(t, it.IsGameOver(board))
 	})
 }
 
 func TestWinningPlayerIsGameOver(t *testing.T) {
-	for _, player := range [2]int{core.User, core.AI} {
+	for _, player := range [2]int{players.User, players.AI} {
 		for position := 0; position < 3; position++ {
 			assert.True(t, it.IsGameOver(boards.FillRow(boards.Empty(), position, player)))
 			assert.True(t, it.IsGameOver(boards.FillColumn(boards.Empty(), position, player)))
@@ -59,8 +59,8 @@ func TestAllInputsWithinRangeAreValid(t *testing.T) {
 
 func TestCannotMoveToOccupiedCells(t *testing.T) {
 	var board = boards.Empty()
-	board[0][0] = core.AI
-	board[1][1] = core.User
+	board[0][0] = players.AI
+	board[1][1] = players.User
 	assert.False(t, it.IsValidMove(board, [2]int{}))
 	assert.False(t, it.IsValidMove(board, [2]int{1, 1}))
 	assert.True(t, it.IsValidMove(board, [2]int{0, 1}))

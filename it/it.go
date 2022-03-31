@@ -1,9 +1,9 @@
 package it
 
-import "ttt/core"
+import "ttt/players"
 
 func IsEmpty(value int) bool {
-	return value == core.Empty
+	return value == players.Empty
 }
 
 func IsValidMove(board [3][3]int, move [2]int) bool {
