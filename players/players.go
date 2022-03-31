@@ -15,3 +15,9 @@ func ToString(token int) string {
 		return "_"
 	}
 }
+
+func ForEach(f func(int)) {
+	for _, player := range []int{AI, User} {
+		f(player)
+	}
+}

@@ -25,14 +25,14 @@ func TestIncompleteGameIsNotGameOver(t *testing.T) {
 }
 
 func TestWinningPlayerIsGameOver(t *testing.T) {
-	for _, player := range [2]int{players.User, players.AI} {
+	players.ForEach(func(player int) {
 		for position := 0; position < 3; position++ {
 			assert.True(t, it.IsGameOver(boards.FillRow(boards.Empty(), position, player)))
 			assert.True(t, it.IsGameOver(boards.FillColumn(boards.Empty(), position, player)))
 		}
 		assert.True(t, it.IsGameOver(boards.FillAscendingDiagonal(boards.Empty(), player)))
 		assert.True(t, it.IsGameOver(boards.FillDescendingDiagonal(boards.Empty(), player)))
-	}
+	})
 }
 
 func TestOutOfRangeMovesAreInvalid(t *testing.T) {

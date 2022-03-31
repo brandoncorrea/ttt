@@ -7,20 +7,6 @@ import (
 	"ttt/players"
 )
 
-func ForPlayer(f func(int)) {
-	for _, player := range []int{players.AI, players.User} {
-		f(player)
-	}
-}
-
-func ForPlayerAndIndices(f func(int, int, int)) {
-	ForPlayer(func(p int) {
-		boards.ForIndices(func(r int, c int) {
-			f(p, r, c)
-		})
-	})
-}
-
 func TestNoAvailableMoves(t *testing.T) {
 	assert.Empty(t, boards.AvailableMoves(boards.FullDrawBoard()))
 }
@@ -50,17 +36,19 @@ func TestNoChildrenInFullBoard(t *testing.T) {
 }
 
 func TestOneChildInBoard(t *testing.T) {
-	ForPlayerAndIndices(func(player int, row int, column int) {
-		var board = boards.FullDrawBoard()
-		board[row][column] = players.Empty
-		var children = boards.Children(board, player)
-		board[row][column] = player
-		assert.Equal(t, [][3][3]int{board}, children)
+	players.ForEach(func(player int) {
+		boards.ForIndices(func(row int, column int) {
+			var board = boards.FullDrawBoard()
+			board[row][column] = players.Empty
+			var children = boards.Children(board, player)
+			board[row][column] = player
+			assert.Equal(t, [][3][3]int{board}, children)
+		})
 	})
 }
 
 func TestManyChildrenInBoard(t *testing.T) {
-	ForPlayer(func(player int) {
+	players.ForEach(func(player int) {
 		var expected [][3][3]int
 		boards.ForIndices(func(row int, column int) {
 			var board = boards.Empty()
@@ -105,7 +93,7 @@ func TestNoWinningPlayerOnEmptyBoard(t *testing.T) {
 }
 
 func TestWinningPlayerOnRowColumnOrDiagonal(t *testing.T) {
-	for player := range []int{players.User, players.AI} {
+	players.ForEach(func(player int) {
 		var emptyBoard = boards.Empty()
 		for position := 0; position < 3; position++ {
 			assert.Equal(t, player, boards.WinningPlayer(boards.FillRow(emptyBoard, position, player)))
@@ -114,7 +102,7 @@ func TestWinningPlayerOnRowColumnOrDiagonal(t *testing.T) {
 
 		assert.Equal(t, player, boards.WinningPlayer(boards.FillDescendingDiagonal(emptyBoard, player)))
 		assert.Equal(t, player, boards.WinningPlayer(boards.FillAscendingDiagonal(emptyBoard, player)))
-	}
+	})
 }
 
 func TestNoWinnerOnDrawBoard(t *testing.T) {
