@@ -1,4 +1,4 @@
-# This project has been moved to [tictactoe]https://github.com/brandoncorrea/tictactoe/tree/main/go
+# This project has been moved to [tictactoe](https://github.com/brandoncorrea/tictactoe/tree/main/go)
 
 # ttt
 
